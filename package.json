@@ -1,0 +1,14 @@
+{
+  "name": "HFI",
+  "version": "1.0.0",
+  "description": "HFI - Yearn on Harmony",
+  "main": "truffle.js",
+  "dependencies": {
+    "@harmony-js/core": "^0.1.50",
+    "@openzeppelin/contracts": "^2.5.1",
+    "dotenv": "^8.2.0",
+    "tslib": "^2.0.0",
+    "web3": "^1.2.11",
+    "yargs": "^15.4.1"
+  }
+}
