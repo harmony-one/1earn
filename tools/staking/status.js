@@ -33,7 +33,8 @@ if (argv["token-address"] == null || argv["token-address"] == '') {
 
 // Libs
 const web3 = require('web3');
-const Network = require("../network.js");
+const Coingecko = require('../utils/coingecko');
+const Network = require("../network");
 
 // Vars
 const network = new Network(argv.network);
@@ -51,19 +52,26 @@ const walletAddress = tokenContract.wallet.signer.address;
 
 async function status() {
   let tokenTotal = await tokenInstance.totalSupply().call(network.gasOptions());
-  console.log(`Current total supply of the lp token is: ${web3.utils.fromWei(tokenTotal)}`);
+  console.log(`Current total supply of the lp token is: ${web3.utils.fromWei(tokenTotal)}\n`);
 
   let balance = await tokenInstance.balanceOf(walletAddress).call(network.gasOptions());
   console.log(`Balance of lp token ${tokenAddress} for address ${walletAddress} is: ${web3.utils.fromWei(balance)}\n`);
 
   let stakingTotal = await rewardsInstance.totalSupply().call(network.gasOptions());
-  console.log(`Total amount of staked lp token (${tokenAddress}) in the YearnRewards contract (${rewardContractAddress}) is now: ${web3.utils.fromWei(stakingTotal)}`);
+  console.log(`Total amount of staked lp token (${tokenAddress}) in the YearnRewards contract (${rewardContractAddress}) is now: ${web3.utils.fromWei(stakingTotal)}\n`);
 
   let balanceOf = await rewardsInstance.balanceOf(walletAddress).call(network.gasOptions());
-  console.log(`Balance for address ${walletAddress} is now: ${web3.utils.fromWei(balanceOf)}`);
+  console.log(`Balance for address ${walletAddress} is now: ${web3.utils.fromWei(balanceOf)}\n`);
 
   let earned = await rewardsInstance.earned(walletAddress).call(network.gasOptions());
-  console.log(`Current earned rewards for address ${walletAddress} is: ${web3.utils.fromWei(earned)} HFI`);
+  let price = await Coingecko.price('yearn-finance');
+  let amount = ((earned / 1e18) * price);
+  let formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+  let formatted = formatter.format(amount);
+  console.log(`Current earned rewards for address ${walletAddress} is: ${web3.utils.fromWei(earned)} HFI - ${formatted}\n`);
 }
 
 status()

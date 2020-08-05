@@ -6,6 +6,7 @@
   "dependencies": {
     "@harmony-js/core": "^0.1.50",
     "@openzeppelin/contracts": "^2.5.1",
+    "axios": "^0.19.2",
     "dotenv": "^8.2.0",
     "tslib": "^2.0.0",
     "web3": "^1.2.11",
