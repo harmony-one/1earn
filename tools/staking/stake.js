@@ -69,7 +69,7 @@ async function tokenStatus() {
 }
 
 async function stake() {
-  console.log(`Attempting to approve ${walletAddress} to spend ${argv.amount} LP tokens (${tokenAddress}) for ${walletAddress}...`);
+  console.log(`Attempting to approve ${rewardContractAddress} to spend ${argv.amount} LP tokens (${tokenAddress}) for ${walletAddress}...`);
   let approvalResult = await tokenInstance.approve(rewardContractAddress, amount).send(network.gasOptions());
   let approvalTxHash = approvalResult.transaction.receipt.transactionHash;
   console.log(`Approval tx hash: ${approvalTxHash}\n`);
