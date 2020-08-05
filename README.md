@@ -84,12 +84,12 @@ This will initialize the rewards contract and make it possible for stakers to ea
 tools/staking/stake.js - will start staking hCRV tokens with [the rewards contract](contracts/rewards/YearnRewards.sol).
 
 ```
-node tools/staking/stake.js --network testnet --rewards-contract $rewards --token-address $hcrv --amount 10000
+node tools/staking/stake.js --network testnet --lp $hcrv --rewards $rewards --amount 10000
 ```
 
 ##### status.js
 tools/staking/status.js - will show status for the current staking to [the rewards contract](contracts/rewards/YearnRewards.sol).
 
 ```
-node tools/staking/status.js --network testnet --rewards-contract $rewards --token-address $hcrv
+node tools/staking/status.js --network testnet --gov $hfi --lp $hcrv --rewards $rewards
 ```
