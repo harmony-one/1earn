@@ -25,20 +25,19 @@ contract HRC20Faucet is Ownable {
     require(balance() > amount, "Not enough token funds in the faucet");
     lastBlock[_to] = currentBlock;
     token.transfer(address(uint160(_to)), amount);
-
     emit funded(amount);
-	}
+  }
 
   function balance() public view returns (uint256) {
-		return token.balanceOf(address(this));
-	}
+    return token.balanceOf(address(this));
+  }
 
   function setAmount(uint256 _amount) public onlyOwner {
-		amount = _amount;
-	}
+    amount = _amount;
+  }
 
   function setFrequency(uint256 _frequency) public onlyOwner {
-		frequency = _frequency;
-	}
-
+    frequency = _frequency;
+  }
+  
 }
