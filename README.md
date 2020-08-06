@@ -42,12 +42,14 @@ truffle migrate --reset --network mainnet
 
 To simplify testing of the contracts, it's advisable to set bash variables for the various tokens and contracts involved in the system.
 
-After you've deployed with e.g. `truffle migrate --reset --network testnet` store the resulting addresses of the contracts using e.g:
+After you've deployed with e.g. `truffle migrate --reset --network testnet` the deploy script will output a line of bash variables containing all contract addresses, e.g:
 ```
-hfi=0xAEc013B67205D47A0685d9E3cE387248a4c35488; hcrv=0x71c2461B6127639866dCD23f5460CDEf85D82152; rewards=0x65f22d3D8b3D9824AdBC30026304FE936d587266
+hfi=0x3Ac8E1ad4450FA8aCcc780a71bA8c378eE9429B1; hcrv=0x710B540E36028b0f8B84B88B5541257D516DE891; faucet=0x2F318989eB2ebd143aeb09f0B73E49726F2C63aC; rewards=0x9eEEfd308DA51944c1dc8A84E8750D7Aea823f1F
 ```
 
-Then when you interact with the various tools, just use the bash variable where a contract address is expected.
+Copy that line and paste it into your terminal and hit enter.
+
+You can now copy & paste the tool examples in this README to interact with the various interaction tools in this repo.
 
 ## Tools
 
