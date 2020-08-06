@@ -13,6 +13,6 @@ contract HCRV is ERC20, ERC20Mintable, ERC20Detailed {
   using SafeMath for uint;
 
   constructor() public ERC20Detailed("Harmony Curve", "hCRV", 18) {
-      _mint(msg.sender, 1000000000000000000000000); // 1,000,000 initial supply
+    _mint(msg.sender, 100000000000000000000000000); // 100,000,000 initial supply
   }
 }

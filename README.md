@@ -67,6 +67,17 @@ node tools/tokens/mint.js --network testnet --amount 1000 --token HFI --contract
 node tools/tokens/mint.js --network testnet --amount 1000 --token hCRV --contract $hcrv
 ```
 
+#### Faucet
+tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for hCRV) for a given token with the specified amount of funds
+```
+node tools/faucet/init.js --network testnet --lp $hcrv --contract $faucet --amount 10000000
+```
+
+tools/faucet/fund.js - fund an account using the HRC20 faucet (hCRV tokens):
+```
+node tools/faucet/fund.js --network testnet --lp $hcrv --contract $faucet
+```
+
 ### Rewards
 
 #### Contract initialization
