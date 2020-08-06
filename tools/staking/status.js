@@ -49,20 +49,22 @@ if (rewardContractAddress == null || rewardContractAddress == '') {
 const web3 = require('web3');
 const Staking = require('./staking');
 const Network = require("../network");
+const { getAddress } = require("@harmony-js/crypto");
 
 // Vars
 const network = new Network(argv.network);
 
-let govTokenContract = network.loadContract('../build/contracts/HFI.json', govTokenAddress);
+let govTokenContract = network.loadContract('../build/contracts/HFI.json', govTokenAddress, 'tester');
 let govTokenInstance = govTokenContract.methods;
 
-let lpTokenContract = network.loadContract('../build/contracts/HCRV.json', lpTokenAddress);
+let lpTokenContract = network.loadContract('../build/contracts/HCRV.json', lpTokenAddress, 'tester');
 let lpTokenInstance = lpTokenContract.methods;
 
-let rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardContractAddress);
+let rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardContractAddress, 'tester');
 let rewardsInstance = rewardsContract.methods;
 
 const walletAddress = govTokenContract.wallet.signer.address;
+const walletAddressBech32 = getAddress(walletAddress).bech32;
 
 async function status() {
   await tokenStatus('gov', govTokenInstance, govTokenAddress, walletAddress);
@@ -75,7 +77,7 @@ async function tokenStatus(type, instance, address, walletAddress) {
   console.log(`Current total supply of the ${type} token is: ${web3.utils.fromWei(tokenTotal)}`);
 
   let balance = await instance.balanceOf(walletAddress).call(network.gasOptions());
-  console.log(`Balance of ${type} token ${address} for address ${walletAddress} is: ${web3.utils.fromWei(balance)}\n`);
+  console.log(`Balance of ${type} token ${address} for address ${walletAddressBech32} / ${walletAddress} is: ${web3.utils.fromWei(balance)}\n`);
 }
 
 status()

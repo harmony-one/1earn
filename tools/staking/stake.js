@@ -48,25 +48,27 @@ if (argv.amount == null || argv.amount == '') {
 const web3 = require('web3');
 const Staking = require('./staking');
 const Network = require("../network.js");
+const { getAddress } = require("@harmony-js/crypto");
 
 // Vars
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-let rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardContractAddress);
+let rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardContractAddress, 'tester');
 let rewardsInstance = rewardsContract.methods;
 
-let lpTokenContract = network.loadContract('../build/contracts/HCRV.json', lpTokenAddress);
+let lpTokenContract = network.loadContract('../build/contracts/HCRV.json', lpTokenAddress, 'tester');
 let lpTokenInstance = lpTokenContract.methods;
 
 const walletAddress = rewardsContract.wallet.signer.address;
+const walletAddressBech32 = getAddress(walletAddress).bech32;
 
 async function tokenStatus() {
   let total = await lpTokenInstance.totalSupply().call(network.gasOptions());
   console.log(`Current total supply of the lp token is: ${web3.utils.fromWei(total)}`);
 
   let balance = await lpTokenInstance.balanceOf(walletAddress).call(network.gasOptions());
-  console.log(`Balance of lp token ${lpTokenAddress} for address ${walletAddress} is: ${web3.utils.fromWei(balance)}\n`);
+  console.log(`Balance of lp token ${lpTokenAddress} for address ${walletAddressBech32} / ${walletAddress} is: ${web3.utils.fromWei(balance)}\n`);
 }
 
 async function stake() {
