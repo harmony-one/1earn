@@ -7,9 +7,9 @@ const argv = yargs
         type: 'string',
         default: 'testnet'
     })
-    .option('lp', {
-      alias: 'l',
-      description: 'The contract address for the liquidity provider token (hCRV)',
+    .option('token', {
+      alias: 't',
+      description: 'The contract address for the token you want to interact with (in our case: hCRV)',
       type: 'string'
     })
     .option('contract', {
@@ -21,12 +21,12 @@ const argv = yargs
     .alias('help', 'h')
     .argv;
 
-const lpTokenAddress = argv.lp;
+const tokenAddress = argv.token;
 const faucetContractAddress = argv.contract;
 const amount = 10000; // This depends on the HRC20 faucet configuration
 
-if (lpTokenAddress == null || lpTokenAddress == '') {
-  console.log('You must supply a lp token contract address using --lp CONTRACT_ADDRESS or -l CONTRACT_ADDRESS!');
+if (tokenAddress == null || tokenAddress == '') {
+  console.log('You must supply a token contract address using --token CONTRACT_ADDRESS or -t CONTRACT_ADDRESS!');
   process.exit(0);
 }
 
@@ -43,21 +43,21 @@ const { getAddress } = require("@harmony-js/crypto");
 // Vars
 const network = new Network(argv.network);
 
-const lpTokenContract = network.loadContract(`../build/contracts/HCRV.json`, lpTokenAddress, 'tester');
-const lpTokenInstance = lpTokenContract.methods;
+const tokenContract = network.loadContract(`../build/contracts/HCRV.json`, tokenAddress, 'tester');
+const tokenInstance = tokenContract.methods;
 
 const faucetContract = network.loadContract(`../build/contracts/HRC20Faucet.json`, faucetContractAddress, 'tester');
 const faucetInstance = faucetContract.methods;
 
-const walletAddress = lpTokenContract.wallet.signer.address;
+const walletAddress = tokenContract.wallet.signer.address;
 const walletAddressBech32 = getAddress(walletAddress).bech32;
 
 async function status() {
-  let balanceOf = await lpTokenInstance.balanceOf(walletAddress).call(network.gasOptions());
-  console.log(`hCRV (${lpTokenAddress}) balance for address ${walletAddress} / ${walletAddressBech32} is: ${web3.utils.fromWei(balanceOf)}\n`);
+  let balanceOf = await tokenInstance.balanceOf(walletAddress).call(network.gasOptions());
+  console.log(`hCRV (${tokenAddress}) balance for address ${walletAddress} / ${walletAddressBech32} is: ${web3.utils.fromWei(balanceOf)}\n`);
 
   let balance = await faucetInstance.balance().call(network.gasOptions());
-  console.log(`The current balance of hCRV (${lpTokenAddress}) tokens in the faucet is: ${web3.utils.fromWei(balance)}`);
+  console.log(`The current balance of hCRV (${tokenAddress}) tokens in the faucet is: ${web3.utils.fromWei(balance)}`);
 }
 
 async function fund() {
