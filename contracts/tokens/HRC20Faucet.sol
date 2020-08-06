@@ -8,10 +8,10 @@ contract HRC20Faucet is Ownable {
 
   uint256 public amount;
   uint256 public frequency;
-	mapping(address => uint256) private lastBlock;
+  mapping(address => uint256) private lastBlock;
 
   event funded(uint256 _amount);
-
+  
   constructor(address _token, uint256 _amount, uint256 _frequency) public {
     require(_token != address(0), "HRC20Faucet: can't set the token address to the zero address");
     token = IERC20(_token);
@@ -39,5 +39,5 @@ contract HRC20Faucet is Ownable {
   function setFrequency(uint256 _frequency) public onlyOwner {
     frequency = _frequency;
   }
-  
+
 }
