@@ -8,7 +8,7 @@ contract GovTokenWrapper {
     using SafeERC20 for IERC20;
 
     // Original yfi token address: 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e
-    IERC20 public vote = IERC20(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e); // TODO: replace with HFI contract address
+    IERC20 public HFI = IERC20(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e); // TODO: replace with HFI contract address
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -24,12 +24,12 @@ contract GovTokenWrapper {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        vote.safeTransferFrom(msg.sender, address(this), amount);
+        HFI.safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        vote.safeTransfer(msg.sender, amount);
+        HFI.safeTransfer(msg.sender, amount);
     }
 }
