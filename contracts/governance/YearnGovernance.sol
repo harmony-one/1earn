@@ -8,12 +8,19 @@ import "../rewards/IRewardDistributionRecipient.sol";
 
 contract YearnGovernance is GovTokenWrapper, IRewardDistributionRecipient {
 
+    constructor(address stakeHFI, address mineHCRV) public {
+        require(stakeHFI != address(0) && mineHCRV != address(0), "HFI or hCRV can't be zero address");
+        HFI = IERC20(stakeHFI);
+        hCRV = IERC20(mineHCRV);
+        governance = msg.sender;
+    }
+
     /* Fee collection for any other token */
 
     function seize(IERC20 _token, uint amount) external {
         require(msg.sender == governance, "!governance");
-        require(_token != yfi, "yfi");
-        require(_token != vote, "yfi");
+        require(_token != hCRV, "hCRV");
+        require(_token != HFI, "hCRV");
         _token.safeTransfer(governance, amount);
     }
 
@@ -113,8 +120,8 @@ contract YearnGovernance is GovTokenWrapper, IRewardDistributionRecipient {
 
     /* Default rewards contract */
 
-    // Original yfi token address: 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e
-    IERC20 public yfi = IERC20(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e); // TODO: replace with HFI contract address
+    // Original hCRV token address: 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e
+    IERC20 public hCRV = IERC20(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e); // TODO: replace with HFI contract address
 
     uint256 public constant DURATION = 7 days;
 
@@ -191,7 +198,7 @@ contract YearnGovernance is GovTokenWrapper, IRewardDistributionRecipient {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            yfi.safeTransfer(msg.sender, reward);
+            hCRV.safeTransfer(msg.sender, reward);
             emit RewardPaid(msg.sender, reward);
         }
     }
