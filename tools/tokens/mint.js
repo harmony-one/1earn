@@ -50,7 +50,7 @@ const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 const token = argv.token.toUpperCase();
 
-const contract = network.loadContract(`../build/contracts/${token}.json`, argv.contract);
+const contract = network.loadContract(`../build/contracts/${token}.json`, argv.contract, 'deployer');
 const instance = contract.methods;
 const ownerAddress = contract.wallet.signer.address;
 

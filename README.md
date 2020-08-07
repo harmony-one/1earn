@@ -42,12 +42,14 @@ truffle migrate --reset --network mainnet
 
 To simplify testing of the contracts, it's advisable to set bash variables for the various tokens and contracts involved in the system.
 
-After you've deployed with e.g. `truffle migrate --reset --network testnet` store the resulting addresses of the contracts using e.g:
+After you've deployed with e.g. `truffle migrate --reset --network testnet` the deploy script will output a line of bash variables containing all contract addresses, e.g:
 ```
-hfi=0xAEc013B67205D47A0685d9E3cE387248a4c35488; hcrv=0x71c2461B6127639866dCD23f5460CDEf85D82152; rewards=0x65f22d3D8b3D9824AdBC30026304FE936d587266
+hfi=0x3Ac8E1ad4450FA8aCcc780a71bA8c378eE9429B1; hcrv=0x710B540E36028b0f8B84B88B5541257D516DE891; faucet=0x2F318989eB2ebd143aeb09f0B73E49726F2C63aC; rewards=0x9eEEfd308DA51944c1dc8A84E8750D7Aea823f1F
 ```
 
-Then when you interact with the various tools, just use the bash variable where a contract address is expected.
+Copy that line and paste it into your terminal and hit enter.
+
+You can now copy & paste the tool examples in this README to interact with the various interaction tools in this repo.
 
 ## Tools
 
@@ -67,6 +69,17 @@ node tools/tokens/mint.js --network testnet --amount 1000 --token HFI --contract
 node tools/tokens/mint.js --network testnet --amount 1000 --token hCRV --contract $hcrv
 ```
 
+#### Faucet
+tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for hCRV) for a given token with the specified amount of funds
+```
+node tools/faucet/init.js --network testnet --token $hcrv --contract $faucet --amount 100000
+```
+
+tools/faucet/fund.js - fund an account using the HRC20 faucet (hCRV tokens):
+```
+node tools/faucet/fund.js --network testnet --token $hcrv --contract $faucet
+```
+
 ### Rewards
 
 #### Contract initialization
@@ -84,12 +97,12 @@ This will initialize the rewards contract and make it possible for stakers to ea
 tools/staking/stake.js - will start staking hCRV tokens with [the rewards contract](contracts/rewards/YearnRewards.sol).
 
 ```
-node tools/staking/stake.js --network testnet --rewards-contract $rewards --token-address $hcrv --amount 10000
+node tools/staking/stake.js --network testnet --lp $hcrv --rewards $rewards --amount 10000
 ```
 
 ##### status.js
 tools/staking/status.js - will show status for the current staking to [the rewards contract](contracts/rewards/YearnRewards.sol).
 
 ```
-node tools/staking/status.js --network testnet --rewards-contract $rewards --token-address $hcrv
+node tools/staking/status.js --network testnet --gov $hfi --lp $hcrv --rewards $rewards
 ```

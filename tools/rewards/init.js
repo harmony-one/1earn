@@ -39,7 +39,7 @@ const Network = require("../network.js");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-const contract = network.loadContract('../build/contracts/YearnRewards.json', argv.contract);
+const contract = network.loadContract('../build/contracts/YearnRewards.json', argv.contract, 'deployer');
 const instance = contract.methods;
 const ownerAddress = contract.wallet.signer.address;
 
