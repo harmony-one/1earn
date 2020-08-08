@@ -149,7 +149,10 @@ cd tools/governance
 #### Vote
 tools/governance/vote.js - VoteFor or VoteAgainst a proposal by Propose. You need to provide the proposal ID by `--id=ProposalID`.
 
-```
+```shell
 cd tools/governance
+# vote for
 ./run.sh vote.js --id=0
+# vote against
+./run.sh vote.js --id=0 --against
 ```
