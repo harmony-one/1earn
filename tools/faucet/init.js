@@ -53,7 +53,7 @@ const { getAddress } = require("@harmony-js/crypto");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-const tokenContract = network.loadContract(`../build/contracts/HCRV.json`, tokenAddress, 'tester');
+const tokenContract = network.loadContract(`../build/contracts/HCRV.json`, tokenAddress, 'deployer');
 const tokenInstance = tokenContract.methods;
 
 const faucetContract = network.loadContract(`../build/contracts/HRC20Faucet.json`, faucetContractAddress, 'deployer');
