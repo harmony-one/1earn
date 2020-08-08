@@ -139,7 +139,7 @@ This will display the proposal ID in the end.
 
 
 ##### status.js
-tools/governance/status.js - will show status for the current proposals to [the governance contract](contracts/rewards/YearnGovernance.sol).
+tools/governance/status.js - will show status of the current proposals with [the governance contract](contracts/rewards/YearnGovernance.sol).
 
 ```
 cd tools/governance
