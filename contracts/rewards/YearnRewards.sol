@@ -7,11 +7,11 @@ import "./LPTokenWrapper.sol";
 import "./IRewardDistributionRecipient.sol";
 
 contract YearnRewards is LPTokenWrapper, IRewardDistributionRecipient {
-  IERC20 public governanceToken;
+  IERC20 public rewardToken;
 
-  constructor(address _governanceToken, address _lpToken) public LPTokenWrapper(_lpToken) {
-      require(_governanceToken != address(0), "YearnRewards: can't set the governance token address to the zero address");
-      governanceToken = IERC20(_governanceToken);
+  constructor(address _lpToken, address _rewardToken) public LPTokenWrapper(_lpToken) {
+      require(_rewardToken != address(0), "YearnRewards: can't set the governance token address to the zero address");
+      rewardToken = IERC20(_rewardToken);
   }
 
   // Original yfi token address: 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e
@@ -88,7 +88,7 @@ contract YearnRewards is LPTokenWrapper, IRewardDistributionRecipient {
     uint256 reward = earned(msg.sender);
     require(reward > 0, "Cannot withdraw 0 rewards");
     rewards[msg.sender] = 0;
-    governanceToken.safeTransfer(msg.sender, reward);
+    rewardToken.safeTransfer(msg.sender, reward);
     emit RewardPaid(msg.sender, reward);
   }
 

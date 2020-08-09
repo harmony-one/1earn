@@ -15,8 +15,8 @@ module.exports = function (deployer) {
   deployer.deploy(HFI).then(function () {
     return deployer.deploy(HCRV).then(function () {
       return deployer.deploy(HRC20Faucet, HCRV.address, faucet.amount, faucet.frequency).then(function () {
-        return deployer.deploy(YearnRewards, HFI.address, HCRV.address).then(function () {
-          return deployer.deploy(YearnGovernance, HFI.address, HCRV.address).then(function () {
+        return deployer.deploy(YearnRewards, HCRV.address, HFI.address).then(function () {
+          return deployer.deploy(YearnGovernance, HFI.address, HCRV.address, 0).then(function () {
             console.log(`   HFI address: ${HFI.address} - ${getAddress(HFI.address).bech32}`);
             console.log(`   hCRV address: ${HCRV.address} - ${getAddress(HCRV.address).bech32}`);
             console.log(`   hCRV faucet address: ${HRC20Faucet.address} - ${getAddress(HRC20Faucet.address).bech32}`);

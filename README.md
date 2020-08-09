@@ -120,8 +120,7 @@ node tools/staking/claim.js --network testnet --gov $hfi --lp $hcrv --rewards $r
 To initialize the governance system (so that people staking their HFI will start earning hCRV rewards) you need to run `tools/governance/init.js`:
 
 ```
-cd tools/governance
-./run.sh init.js --amount 10000
+node tools/governance/init.js --network testnet --token $hcrv --contract $governance --amount 1000000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn HFI rewards for 1 week from the time of initialization.

@@ -19,12 +19,12 @@ contract HRC20Faucet is Ownable {
     frequency = _frequency;
   }
 
-  function fund(address _to) public {
+  function fund() public {
     uint256 currentBlock = block.number;
-    require(lastBlock[_to] == 0 || currentBlock - lastBlock[_to] >= frequency, "Address has been funded within the last hour");
+    require(lastBlock[msg.sender] == 0 || currentBlock - lastBlock[msg.sender] >= frequency, "Address has been funded recently");
     require(balance() > amount, "Not enough token funds in the faucet");
-    lastBlock[_to] = currentBlock;
-    token.transfer(address(uint160(_to)), amount);
+    lastBlock[msg.sender] = currentBlock;
+    token.transfer(address(uint160(msg.sender)), amount);
     emit funded(amount);
   }
 
