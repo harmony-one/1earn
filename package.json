@@ -1,7 +1,7 @@
 {
-  "name": "HFI",
+  "name": "1earn.finance",
   "version": "1.0.0",
-  "description": "HFI - Yearn on Harmony",
+  "description": "1earn.finance - Yearn on Harmony with 5 second finality and low tx fees",
   "main": "truffle.js",
   "dependencies": {
     "@harmony-js/core": "^0.1.50",

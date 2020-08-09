@@ -14,7 +14,7 @@ const argv = yargs
     })
     .option('token', {
       alias: 't',
-      description: 'The contract address for the token you want to use as rewards for the rewards contract (in our case: HFI)',
+      description: 'The contract address for the token you want to use as rewards for the rewards contract (in our case: 1FI)',
       type: 'string'
     })
     .option('amount', {
@@ -52,22 +52,22 @@ const Network = require("../network.js");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-const rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardsContractAddress, 'deployer');
+const rewardsContract = network.loadContract('../build/contracts/OneEarnRewards.json', rewardsContractAddress, 'deployer');
 const rewardsInstance = rewardsContract.methods;
 
-const tokenContract = network.loadContract(`../build/contracts/HFI.json`, tokenAddress, 'deployer');
+const tokenContract = network.loadContract(`../build/contracts/OneFI.json`, tokenAddress, 'deployer');
 const tokenInstance = tokenContract.methods;
 
 const ownerAddress = rewardsContract.wallet.signer.address;
 
 async function init() {
-  console.log(`Attempting to transfer ${argv.amount} HFI tokens to rewards contract address ${rewardsContractAddress} ...`);
+  console.log(`Attempting to transfer ${argv.amount} 1FI tokens to rewards contract address ${rewardsContractAddress} ...`);
   let transferResult = await tokenInstance.transfer(rewardsContractAddress, amount).send(network.gasOptions());
   let transferResultTxHash = transferResult.transaction.receipt.transactionHash;
-  console.log(`Sent ${argv.amount} HFI tokens to rewards contract address ${rewardsContractAddress} - tx hash: ${transferResultTxHash}\n`);
+  console.log(`Sent ${argv.amount} 1FI tokens to rewards contract address ${rewardsContractAddress} - tx hash: ${transferResultTxHash}\n`);
 
   let balanceOf = await tokenInstance.balanceOf(rewardsContractAddress).call(network.gasOptions());
-  console.log(`HFI balance for contract address ${rewardsContractAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
+  console.log(`1FI balance for contract address ${rewardsContractAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
 
   console.log(`Attempting to setRewardDistribution to address ${ownerAddress} ...`);
   let distributionResult = await rewardsInstance.setRewardDistribution(ownerAddress).send(network.gasOptions());

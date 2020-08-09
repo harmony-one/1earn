@@ -9,17 +9,17 @@ const argv = yargs
     })
     .option('gov', {
       alias: 'g',
-      description: 'The contract address for the governance token (HFI)',
+      description: 'The contract address for the governance token (1FI)',
       type: 'string'
     })
     .option('lp', {
       alias: 'l',
-      description: 'The contract address for the liquidity provider token (hCRV)',
+      description: 'The contract address for the liquidity provider token (1CRV)',
       type: 'string'
     })
     .option('rewards', {
       alias: 'r',
-      description: 'The contract address for the rewards contract (YearnRewards)',
+      description: 'The contract address for the rewards contract (1earnRewards)',
       type: 'string'
     })
     .help()
@@ -54,13 +54,13 @@ const { getAddress } = require("@harmony-js/crypto");
 // Vars
 const network = new Network(argv.network);
 
-let govTokenContract = network.loadContract('../build/contracts/HFI.json', govTokenAddress, 'tester');
+let govTokenContract = network.loadContract('../build/contracts/OneFI.json', govTokenAddress, 'tester');
 let govTokenInstance = govTokenContract.methods;
 
-let lpTokenContract = network.loadContract('../build/contracts/HCRV.json', lpTokenAddress, 'tester');
+let lpTokenContract = network.loadContract('../build/contracts/OneCRV.json', lpTokenAddress, 'tester');
 let lpTokenInstance = lpTokenContract.methods;
 
-let rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardContractAddress, 'tester');
+let rewardsContract = network.loadContract('../build/contracts/OneEarnRewards.json', rewardContractAddress, 'tester');
 let rewardsInstance = rewardsContract.methods;
 
 const walletAddress = govTokenContract.wallet.signer.address;

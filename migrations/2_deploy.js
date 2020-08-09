@@ -1,8 +1,8 @@
-const HFI = artifacts.require("HFI");
-const HCRV = artifacts.require("HCRV");
+const ONEFI = artifacts.require("OneFI");
+const ONECRV = artifacts.require("OneCRV");
 const HRC20Faucet = artifacts.require("HRC20Faucet");
-const YearnRewards = artifacts.require("YearnRewards");
-const YearnGovernance = artifacts.require("YearnGovernance");
+const ONEearnRewards = artifacts.require("OneEarnRewards");
+const ONEearnGovernance = artifacts.require("OneEarnGovernance");
 
 const { getAddress } = require("@harmony-js/crypto");
 const web3 = require('web3');
@@ -12,22 +12,22 @@ const faucet = {
 }
 
 module.exports = function (deployer) {
-  deployer.deploy(HFI).then(function () {
-    return deployer.deploy(HCRV).then(function () {
-      return deployer.deploy(HRC20Faucet, HCRV.address, faucet.amount, faucet.frequency).then(function () {
-        return deployer.deploy(YearnRewards, HCRV.address, HFI.address).then(function () {
-          return deployer.deploy(YearnGovernance, HFI.address, HCRV.address, 0).then(function () {
-            console.log(`   HFI address: ${HFI.address} - ${getAddress(HFI.address).bech32}`);
-            console.log(`   hCRV address: ${HCRV.address} - ${getAddress(HCRV.address).bech32}`);
-            console.log(`   hCRV faucet address: ${HRC20Faucet.address} - ${getAddress(HRC20Faucet.address).bech32}`);
-            console.log(`   Yearn Rewards contract address: ${YearnRewards.address} - ${getAddress(YearnRewards.address).bech32}`);
-            console.log(`   Yearn Governance contract address: ${YearnGovernance.address} - ${getAddress(YearnGovernance.address).bech32}\n`);
-            console.log(`   hfi=${HFI.address}; hcrv=${HCRV.address}; faucet=${HRC20Faucet.address}; rewards=${YearnRewards.address}; governance=${YearnGovernance.address}\n`);
-            console.log(`   addresses: {"hfi": "${HFI.address}", "hcrv": "${HCRV.address}", "faucet": "${HRC20Faucet.address}", "rewards": "${YearnRewards.address}", "governance": "${YearnGovernance.address}"}`);
-          }); // End Yearn Governance deployment
-        }); // End Yearn Rewards deployment
+  deployer.deploy(ONEFI).then(function () {
+    return deployer.deploy(ONECRV).then(function () {
+      return deployer.deploy(HRC20Faucet, ONECRV.address, faucet.amount, faucet.frequency).then(function () {
+        return deployer.deploy(ONEearnRewards, ONECRV.address, ONEFI.address).then(function () {
+          return deployer.deploy(ONEearnGovernance, ONEFI.address, ONECRV.address, 0).then(function () {
+            console.log(`   1FI address: ${ONEFI.address} - ${getAddress(ONEFI.address).bech32}`);
+            console.log(`   1CRV address: ${ONECRV.address} - ${getAddress(ONECRV.address).bech32}`);
+            console.log(`   1CRV faucet address: ${HRC20Faucet.address} - ${getAddress(HRC20Faucet.address).bech32}`);
+            console.log(`   1earn Rewards contract address: ${ONEearnRewards.address} - ${getAddress(ONEearnRewards.address).bech32}`);
+            console.log(`   1earn Governance contract address: ${ONEearnGovernance.address} - ${getAddress(ONEearnGovernance.address).bech32}\n`);
+            console.log(`   onefi=${ONEFI.address}; onecrv=${ONECRV.address}; faucet=${HRC20Faucet.address}; rewards=${ONEearnRewards.address}; governance=${ONEearnGovernance.address}\n`);
+            console.log(`   addresses: {"onefi": "${ONEFI.address}", "onecrv": "${ONECRV.address}", "faucet": "${HRC20Faucet.address}", "rewards": "${ONEearnRewards.address}", "governance": "${ONEearnGovernance.address}"}`);
+          }); // End 1earn Governance deployment
+        }); // End 1earn Rewards deployment
 
       }); // End HRC20Faucet deployment
-    }); // End HCRV deployment
-  }); // End HFI deployment
+    }); // End 1CRV deployment
+  }); // End 1FI deployment
 }

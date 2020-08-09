@@ -20,9 +20,9 @@ const argv = yargs
     .argv;
 
 
-const YearnGovernance = artifacts.require("YearnGovernance");
-const HFI = artifacts.require("HFI");
-const HCRV = artifacts.require("HCRV");
+const 1earnGovernance = artifacts.require("1earnGovernance");
+const 1FI = artifacts.require("1FI");
+const 1CRV = artifacts.require("1CRV");
 
 const { fromBech32, toBech32 } = require("@harmony-js/crypto");
 
@@ -33,10 +33,10 @@ let govAddress
 let tokenInstance
 let tokenAddress
 
-const walletAddress = YearnGovernance.currentProvider.addresses[0];
+const walletAddress = 1earnGovernance.currentProvider.addresses[0];
 
 function argvCheck() {
-    govAddress = argv.contract ? argv.contract : YearnGovernance.address;
+    govAddress = argv.contract ? argv.contract : 1earnGovernance.address;
     if (!govAddress)
         throw 'You must supply a contract address using --contract CONTRACT_ADDRESS or -c CONTRACT_ADDRESS!';
 }
@@ -44,9 +44,9 @@ function argvCheck() {
 
 async function init() {
     argvCheck();
-    govInstance = await YearnGovernance.at(govAddress);
-    tokenAddress = await govInstance.HFI.call();
-    tokenInstance = await HFI.at(tokenAddress);
+    govInstance = await 1earnGovernance.at(govAddress);
+    tokenAddress = await govInstance.1FI.call();
+    tokenInstance = await 1FI.at(tokenAddress);
 }
 
 const web3 = require('web3');

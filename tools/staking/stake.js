@@ -9,12 +9,12 @@ const argv = yargs
     })
     .option('lp', {
       alias: 'l',
-      description: 'The contract address for the liquidity provider token (hCRV)',
+      description: 'The contract address for the liquidity provider token (1CRV)',
       type: 'string'
     })
     .option('rewards', {
       alias: 'r',
-      description: 'The contract address for the rewards contract (YearnRewards)',
+      description: 'The contract address for the rewards contract (1earnRewards)',
       type: 'string'
     })
     .option('amount', {
@@ -54,10 +54,10 @@ const { getAddress } = require("@harmony-js/crypto");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-let rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardContractAddress, 'tester');
+let rewardsContract = network.loadContract('../build/contracts/OneEarnRewards.json', rewardContractAddress, 'tester');
 let rewardsInstance = rewardsContract.methods;
 
-let lpTokenContract = network.loadContract('../build/contracts/HCRV.json', lpTokenAddress, 'tester');
+let lpTokenContract = network.loadContract('../build/contracts/OneCRV.json', lpTokenAddress, 'tester');
 let lpTokenInstance = lpTokenContract.methods;
 
 const walletAddress = rewardsContract.wallet.signer.address;

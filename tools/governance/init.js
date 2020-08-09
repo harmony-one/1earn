@@ -53,22 +53,22 @@ const Network = require("../network.js");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-const rewardsContract = network.loadContract('../build/contracts/YearnGovernance.json', rewardsContractAddress, 'deployer');
+const rewardsContract = network.loadContract('../build/contracts/OneEarnGovernance.json', rewardsContractAddress, 'deployer');
 const rewardsInstance = rewardsContract.methods;
 
-const tokenContract = network.loadContract(`../build/contracts/HCRV.json`, tokenAddress, 'deployer');
+const tokenContract = network.loadContract(`../build/contracts/OneCRV.json`, tokenAddress, 'deployer');
 const tokenInstance = tokenContract.methods;
 
 const ownerAddress = rewardsContract.wallet.signer.address;
 
 async function init() {
-  console.log(`Attempting to transfer ${argv.amount} HCRV tokens to governance/rewards contract address ${rewardsContractAddress} ...`);
+  console.log(`Attempting to transfer ${argv.amount} 1CRV tokens to governance/rewards contract address ${rewardsContractAddress} ...`);
   let transferResult = await tokenInstance.transfer(rewardsContractAddress, amount).send(network.gasOptions());
   let transferResultTxHash = transferResult.transaction.receipt.transactionHash;
-  console.log(`Sent ${argv.amount} HCRV tokens to rewards contract address ${rewardsContractAddress} - tx hash: ${transferResultTxHash}\n`);
+  console.log(`Sent ${argv.amount} 1CRV tokens to rewards contract address ${rewardsContractAddress} - tx hash: ${transferResultTxHash}\n`);
 
   let balanceOf = await tokenInstance.balanceOf(rewardsContractAddress).call(network.gasOptions());
-  console.log(`HCRV balance for contract address ${rewardsContractAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
+  console.log(`1CRV balance for contract address ${rewardsContractAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
 
   console.log(`Attempting to setRewardDistribution to address ${ownerAddress} ...`);
   let distributionResult = await rewardsInstance.setRewardDistribution(ownerAddress).send(network.gasOptions());

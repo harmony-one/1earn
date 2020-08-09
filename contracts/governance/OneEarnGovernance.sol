@@ -10,12 +10,12 @@ interface Executor {
     function execute(uint, uint, uint, uint) external;
 }
 
-contract YearnGovernance is LPTokenWrapper, IRewardDistributionRecipient {
+contract OneEarnGovernance is LPTokenWrapper, IRewardDistributionRecipient {
   
   IERC20 public rewardToken;
 
   constructor(address _lpToken, address _rewardToken, uint256 _proposalCount) public LPTokenWrapper(_lpToken) {
-    require(_rewardToken != address(0), "YearnRewards: can't set the governance token address to the zero address");
+    require(_rewardToken != address(0), "1earnRewards: can't set the governance token address to the zero address");
     rewardToken = IERC20(_rewardToken);
     governance = msg.sender;
     initialize(_proposalCount);

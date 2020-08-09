@@ -20,9 +20,9 @@ const argv = yargs
     .argv;
 
 
-const YearnGovernance = artifacts.require("YearnGovernance");
-const HFI = artifacts.require("HFI");
-const HCRV = artifacts.require("HCRV");
+const 1earnGovernance = artifacts.require("1earnGovernance");
+const 1FI = artifacts.require("1FI");
+const 1CRV = artifacts.require("1CRV");
 
 const D = console.log;
 
@@ -31,28 +31,28 @@ let govAddress
 let tokenInstance
 let tokenAddress
 
-const walletAddress = YearnGovernance.currentProvider.addresses[0];
+const walletAddress = 1earnGovernance.currentProvider.addresses[0];
 
 
 function argvCheck() {
     if (argv.id == null || argv.id == '')
         throw 'You must supply the id of propose to vote, using --id ID or -i ID!';
-    govAddress = argv.contract ? argv.contract : YearnGovernance.address;
+    govAddress = argv.contract ? argv.contract : 1earnGovernance.address;
     if (!govAddress)
         throw 'You must supply a contract address using --contract CONTRACT_ADDRESS or -c CONTRACT_ADDRESS!';
 }
 
 async function init() {
     argvCheck();
-    govInstance = await YearnGovernance.at(govAddress);
-    tokenAddress = await govInstance.HFI.call();
-    tokenInstance = await HFI.at(tokenAddress);
+    govInstance = await 1earnGovernance.at(govAddress);
+    tokenAddress = await govInstance.1FI.call();
+    tokenInstance = await 1FI.at(tokenAddress);
 }
 
 const web3 = require('web3');
 
 async function tokenStatus() {
-    console.log(`HFI token address: ${tokenAddress}`);
+    console.log(`1FI token address: ${tokenAddress}`);
     let total = await tokenInstance.totalSupply();
     console.log(`Current total supply of the hfi token is: ${web3.utils.fromWei(total)}`);
 

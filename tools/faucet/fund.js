@@ -9,7 +9,7 @@ const argv = yargs
     })
     .option('token', {
       alias: 't',
-      description: 'The contract address for the token you want to interact with (in our case: hCRV)',
+      description: 'The contract address for the token you want to interact with (in our case: 1CRV)',
       type: 'string'
     })
     .option('contract', {
@@ -43,7 +43,7 @@ const { getAddress } = require("@harmony-js/crypto");
 // Vars
 const network = new Network(argv.network);
 
-const tokenContract = network.loadContract(`../build/contracts/HCRV.json`, tokenAddress, 'tester');
+const tokenContract = network.loadContract(`../build/contracts/OneCRV.json`, tokenAddress, 'tester');
 const tokenInstance = tokenContract.methods;
 
 const faucetContract = network.loadContract(`../build/contracts/HRC20Faucet.json`, faucetContractAddress, 'tester');
@@ -54,14 +54,14 @@ const walletAddressBech32 = getAddress(walletAddress).bech32;
 
 async function status() {
   let balanceOf = await tokenInstance.balanceOf(walletAddress).call(network.gasOptions());
-  console.log(`hCRV (${tokenAddress}) balance for address ${walletAddress} / ${walletAddressBech32} is: ${web3.utils.fromWei(balanceOf)}\n`);
+  console.log(`1CRV (${tokenAddress}) balance for address ${walletAddress} / ${walletAddressBech32} is: ${web3.utils.fromWei(balanceOf)}\n`);
 
   let balance = await faucetInstance.balance().call(network.gasOptions());
-  console.log(`The current balance of hCRV (${tokenAddress}) tokens in the faucet is: ${web3.utils.fromWei(balance)}`);
+  console.log(`The current balance of 1CRV (${tokenAddress}) tokens in the faucet is: ${web3.utils.fromWei(balance)}`);
 }
 
 async function fund() {
-  console.log(`Attempting to fund the address ${walletAddress} / ${walletAddressBech32} with ${amount} hCRV tokens from the faucet (${faucetContractAddress}) ...`)
+  console.log(`Attempting to fund the address ${walletAddress} / ${walletAddressBech32} with ${amount} 1CRV tokens from the faucet (${faucetContractAddress}) ...`)
   let tx = await faucetInstance.fund().send(network.gasOptions());
   let txHash = tx.transaction.receipt.transactionHash;
   console.log(`Faucet funding tx hash: ${txHash}\n`);

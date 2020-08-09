@@ -6,16 +6,16 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./LPTokenWrapper.sol";
 import "./IRewardDistributionRecipient.sol";
 
-contract YearnRewards is LPTokenWrapper, IRewardDistributionRecipient {
+contract OneEarnRewards is LPTokenWrapper, IRewardDistributionRecipient {
   IERC20 public rewardToken;
 
   constructor(address _lpToken, address _rewardToken) public LPTokenWrapper(_lpToken) {
-      require(_rewardToken != address(0), "YearnRewards: can't set the governance token address to the zero address");
+      require(_rewardToken != address(0), "1earnRewards: can't set the governance token address to the zero address");
       rewardToken = IERC20(_rewardToken);
   }
 
   // Original yfi token address: 0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e
-  //IERC20 public hfi = IERC20(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e); // TODO: Change this address to the HFI token contract address
+  //IERC20 public hfi = IERC20(0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e); // TODO: Change this address to the 1FI token contract address
   uint256 public constant DURATION = 7 days;
 
   uint256 public periodFinish = 0;

@@ -9,7 +9,7 @@ const argv = yargs
     })
     .option('token', {
       alias: 't',
-      description: 'The contract address for the token you want to interact with (in our case: hCRV)',
+      description: 'The contract address for the token you want to interact with (in our case: 1CRV)',
       type: 'string'
     })
     .option('contract', {
@@ -53,7 +53,7 @@ const { getAddress } = require("@harmony-js/crypto");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-const tokenContract = network.loadContract(`../build/contracts/HCRV.json`, tokenAddress, 'deployer');
+const tokenContract = network.loadContract(`../build/contracts/OneCRV.json`, tokenAddress, 'deployer');
 const tokenInstance = tokenContract.methods;
 
 const faucetContract = network.loadContract(`../build/contracts/HRC20Faucet.json`, faucetContractAddress, 'deployer');
@@ -64,14 +64,14 @@ const walletAddressBech32 = getAddress(walletAddress).bech32;
 
 async function status() {
   let balanceOf = await tokenInstance.balanceOf(walletAddress).call(network.gasOptions());
-  console.log(`hCRV (${tokenAddress}) balance for address ${walletAddress} / ${walletAddressBech32} is: ${web3.utils.fromWei(balanceOf)}\n`);
+  console.log(`1CRV (${tokenAddress}) balance for address ${walletAddress} / ${walletAddressBech32} is: ${web3.utils.fromWei(balanceOf)}\n`);
 
   let balance = await faucetInstance.balance().call(network.gasOptions());
-  console.log(`The current balance of hCRV (${tokenAddress}) tokens in the faucet is: ${web3.utils.fromWei(balance)}`);
+  console.log(`The current balance of 1CRV (${tokenAddress}) tokens in the faucet is: ${web3.utils.fromWei(balance)}`);
 }
 
 async function topup() {
-  console.log(`Attempting to topup the hCRV faucet (${faucetContractAddress}) with ${argv.amount} tokens...`)
+  console.log(`Attempting to topup the 1CRV faucet (${faucetContractAddress}) with ${argv.amount} tokens...`)
   let tx = await tokenInstance.transfer(faucetContractAddress, amount).send(network.gasOptions());
   let txHash = tx.transaction.receipt.transactionHash;
   console.log(`Faucet topup tx hash: ${txHash}\n`);

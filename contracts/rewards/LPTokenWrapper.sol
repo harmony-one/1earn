@@ -15,7 +15,7 @@ contract LPTokenWrapper {
     }
 
     // Original yCRV token address: 0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8
-    //IERC20 public lpToken = IERC20(0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8); // Change this to the LP token address - in our case: hCRV
+    //IERC20 public lpToken = IERC20(0xdF5e0e81Dff6FAF3A7e52BA697820c5e32D806A8); // Change this to the LP token address - in our case: 1CRV
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
