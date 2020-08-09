@@ -62,7 +62,7 @@ async function status() {
 
 async function fund() {
   console.log(`Attempting to fund the address ${walletAddress} / ${walletAddressBech32} with ${amount} 1CRV tokens from the faucet (${faucetContractAddress}) ...`)
-  let tx = await faucetInstance.fund().send(network.gasOptions());
+  let tx = await faucetInstance.fund(walletAddress).send(network.gasOptions());
   let txHash = tx.transaction.receipt.transactionHash;
   console.log(`Faucet funding tx hash: ${txHash}\n`);
 }
