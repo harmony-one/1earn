@@ -86,7 +86,7 @@ node tools/faucet/fund.js --network testnet --token $hcrv --contract $faucet
 To initialize the rewards system (so that people staking their hCRV will start earning HFI rewards) you need to run `tools/rewards/init.js`:
 
 ```
-node tools/rewards/init.js --network testnet --contract $rewards --amount 10000
+node tools/rewards/init.js --network testnet --token $hfi --contract $rewards --amount 10000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn HFI rewards for 1 week from the time of initialization.
@@ -105,4 +105,11 @@ tools/staking/status.js - will show status for the current staking to [the rewar
 
 ```
 node tools/staking/status.js --network testnet --gov $hfi --lp $hcrv --rewards $rewards
+```
+
+##### claim.js
+tools/staking/claim.js - claim staking rewards from [the rewards contract](contracts/rewards/YearnRewards.sol).
+
+```
+node tools/staking/claim.js --network testnet --gov $hfi --lp $hcrv --rewards $rewards
 ```

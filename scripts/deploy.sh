@@ -10,4 +10,4 @@ if [ ! -z "$reset" ]; then
 fi
 
 echo "Deploying using truffle - network: ${network}, reset: ${reset}"
-truffle migrate --network $network $reset
+truffle migrate --network $network --skip-dry-run $reset

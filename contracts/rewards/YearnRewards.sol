@@ -7,7 +7,6 @@ import "./LPTokenWrapper.sol";
 import "./IRewardDistributionRecipient.sol";
 
 contract YearnRewards is LPTokenWrapper, IRewardDistributionRecipient {
-
   IERC20 public governanceToken;
 
   constructor(address _governanceToken, address _lpToken) public LPTokenWrapper(_lpToken) {
@@ -50,13 +49,13 @@ contract YearnRewards is LPTokenWrapper, IRewardDistributionRecipient {
       return rewardPerTokenStored;
     }
     return
-        rewardPerTokenStored.add(
-          lastTimeRewardApplicable()
-            .sub(lastUpdateTime)
-            .mul(rewardRate)
-            .mul(1e18)
-            .div(totalSupply())
-    );
+      rewardPerTokenStored.add(
+        lastTimeRewardApplicable()
+          .sub(lastUpdateTime)
+          .mul(rewardRate)
+          .mul(1e18)
+          .div(totalSupply())
+      );
   }
 
   function earned(address account) public view returns (uint256) {
@@ -87,11 +86,10 @@ contract YearnRewards is LPTokenWrapper, IRewardDistributionRecipient {
 
   function getReward() public updateReward(msg.sender) {
     uint256 reward = earned(msg.sender);
-    if (reward > 0) {
-      rewards[msg.sender] = 0;
-      governanceToken.safeTransfer(msg.sender, reward);
-      emit RewardPaid(msg.sender, reward);
-    }
+    require(reward > 0, "Cannot withdraw 0 rewards");
+    rewards[msg.sender] = 0;
+    governanceToken.safeTransfer(msg.sender, reward);
+    emit RewardPaid(msg.sender, reward);
   }
 
   function notifyRewardAmount(uint256 reward)

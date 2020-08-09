@@ -36,20 +36,20 @@ module.exports = class Network {
       default:
         console.log('Please enter a valid network - testnet or mainnet.');
         throw new Error('NetworkRequired');
-      }
+    }
 
-      this.hmy = new Harmony(
-        url,
-        {
-          chainType: chainType,
-          chainId: chainId,
-        }
-      );
-
-      this.privateKeys = {
-        deployer: process.env[`${this.network.toUpperCase()}_PRIVATE_KEY`],
-        tester: process.env[`${this.network.toUpperCase()}_TEST_ACCOUNT_PRIVATE_KEY`],
+    this.hmy = new Harmony(
+      url,
+      {
+        chainType: chainType,
+        chainId: chainId,
       }
+    );
+
+    this.privateKeys = {
+      deployer: process.env[`${this.network.toUpperCase()}_PRIVATE_KEY`],
+      tester: process.env[`${this.network.toUpperCase()}_TEST_ACCOUNT_PRIVATE_KEY`],
+    }
   }
 
   gasOptions() {

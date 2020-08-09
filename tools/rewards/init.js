@@ -2,27 +2,40 @@
 const yargs = require('yargs');
 const argv = yargs
     .option('network', {
-        alias: 'n',
-        description: 'Which network to mint tokens on',
-        type: 'string',
-        default: 'testnet'
+      alias: 'n',
+      description: 'Which network to use',
+      type: 'string',
+      default: 'testnet'
     })
     .option('contract', {
       alias: 'c',
-      description: 'The contract address',
+      description: 'The rewards contract address',
+      type: 'string'
+    })
+    .option('token', {
+      alias: 't',
+      description: 'The contract address for the token you want to use as rewards for the rewards contract (in our case: HFI)',
       type: 'string'
     })
     .option('amount', {
       alias: 'a',
-      description: 'The amount of tokens to mint',
+      description: 'The amount of tokens to initialize rewards with',
       type: 'string'
     })
     .help()
     .alias('help', 'h')
     .argv;
 
+const rewardsContractAddress = argv.contract;
+const tokenAddress = argv.token;
+
 if (argv.contract == null || argv.contract == '') {
   console.log('You must supply a contract address using --contract CONTRACT_ADDRESS or -c CONTRACT_ADDRESS!');
+  process.exit(0);
+}
+
+if (argv.token == null || argv.token == '') {
+  console.log('You must supply a token contract address using --token CONTRACT_ADDRESS or -t CONTRACT_ADDRESS!');
   process.exit(0);
 }
 
@@ -39,54 +52,66 @@ const Network = require("../network.js");
 const network = new Network(argv.network);
 const amount = web3.utils.toWei(argv.amount);
 
-const contract = network.loadContract('../build/contracts/YearnRewards.json', argv.contract, 'deployer');
-const instance = contract.methods;
-const ownerAddress = contract.wallet.signer.address;
+const rewardsContract = network.loadContract('../build/contracts/YearnRewards.json', rewardsContractAddress, 'deployer');
+const rewardsInstance = rewardsContract.methods;
+
+const tokenContract = network.loadContract(`../build/contracts/HFI.json`, tokenAddress, 'deployer');
+const tokenInstance = tokenContract.methods;
+
+const ownerAddress = rewardsContract.wallet.signer.address;
 
 async function init() {
-  console.log(`Attempting to setRewardDistribution to address ${ownerAddress} ...`)
-  let distributionResult = await instance.setRewardDistribution(ownerAddress).send(network.gasOptions());
+  console.log(`Attempting to transfer ${argv.amount} HFI tokens to rewards contract address ${rewardsContractAddress} ...`);
+  let transferResult = await tokenInstance.transfer(rewardsContractAddress, amount).send(network.gasOptions());
+  let transferResultTxHash = transferResult.transaction.receipt.transactionHash;
+  console.log(`Sent ${argv.amount} HFI tokens to rewards contract address ${rewardsContractAddress} - tx hash: ${transferResultTxHash}\n`);
+
+  let balanceOf = await tokenInstance.balanceOf(rewardsContractAddress).call(network.gasOptions());
+  console.log(`HFI balance for contract address ${rewardsContractAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
+
+  console.log(`Attempting to setRewardDistribution to address ${ownerAddress} ...`);
+  let distributionResult = await rewardsInstance.setRewardDistribution(ownerAddress).send(network.gasOptions());
   console.log(`setRewardDistribution has been configured with address ${ownerAddress}\n`);
 
   console.log(`Attempting to notifyRewardAmount with amount ${argv.amount} ...`);
-  let rewardAmountResult = await instance.notifyRewardAmount(amount).send(network.gasOptions());
+  let rewardAmountResult = await rewardsInstance.notifyRewardAmount(amount).send(network.gasOptions());
   console.log(`notifyRewardAmount has been configured with amount ${argv.amount}\n`);
 }
 
 async function status() {
-  let lastTimeRewardApplicable = await instance.lastTimeRewardApplicable().call(network.gasOptions());
+  let lastTimeRewardApplicable = await rewardsInstance.lastTimeRewardApplicable().call(network.gasOptions());
   let lastTimeRewardApplicableDate = new Date(lastTimeRewardApplicable * 1000);
   console.log(`lastTimeRewardApplicable: ${lastTimeRewardApplicableDate.toLocaleString()}`);
 
-  let rewardPerToken = await instance.rewardPerToken().call(network.gasOptions());
+  let rewardPerToken = await rewardsInstance.rewardPerToken().call(network.gasOptions());
   console.log(`rewardPerToken: ${rewardPerToken}`);
 
-  let totalSupply = await instance.totalSupply().call(network.gasOptions());
+  let totalSupply = await rewardsInstance.totalSupply().call(network.gasOptions());
   console.log(`totalSupply: ${totalSupply}`);
 
-  let periodFinish = await instance.periodFinish().call(network.gasOptions());
+  let periodFinish = await rewardsInstance.periodFinish().call(network.gasOptions());
   let periodFinishDate = new Date(periodFinish * 1000);
   console.log(`periodFinish: ${periodFinishDate.toLocaleString()}`);
 
-  let rewardRate = await instance.rewardRate().call(network.gasOptions());
+  let rewardRate = await rewardsInstance.rewardRate().call(network.gasOptions());
   console.log(`rewardRate: ${web3.utils.fromWei(rewardRate)} tokens per second`);
 
-  let lastUpdateTime = await instance.lastUpdateTime().call(network.gasOptions());
+  let lastUpdateTime = await rewardsInstance.lastUpdateTime().call(network.gasOptions());
   let lastUpdateTimeDate = new Date(lastUpdateTime * 1000);
   console.log(`lastUpdateTime: ${lastUpdateTimeDate.toLocaleString()}`);
 
-  let rewardPerTokenStored = await instance.rewardPerTokenStored().call(network.gasOptions());
+  let rewardPerTokenStored = await rewardsInstance.rewardPerTokenStored().call(network.gasOptions());
   console.log(`rewardPerTokenStored: ${rewardPerTokenStored}`);
 }
 
 async function additionalInfo() {
-  let ownerAddress = await instance.owner().call(network.gasOptions());
+  let ownerAddress = await rewardsInstance.owner().call(network.gasOptions());
   console.log(`owner: ${ownerAddress}`);
 
-  let governanceTokenAddress = await instance.governanceToken().call(network.gasOptions());
+  let governanceTokenAddress = await rewardsInstance.governanceToken().call(network.gasOptions());
   console.log(`governanceToken: ${governanceTokenAddress}`);
 
-  let lpTokenAddress = await instance.lpToken().call(network.gasOptions());
+  let lpTokenAddress = await rewardsInstance.lpToken().call(network.gasOptions());
   console.log(`lpToken: ${lpTokenAddress}`);
 }
 
