@@ -44,7 +44,7 @@ To simplify testing of the contracts, it's advisable to set bash variables for t
 
 After you've deployed with e.g. `truffle migrate --reset --network testnet` the deploy script will output a line of bash variables containing all contract addresses, e.g:
 ```
-hfi=0x3Ac8E1ad4450FA8aCcc780a71bA8c378eE9429B1; hcrv=0x710B540E36028b0f8B84B88B5541257D516DE891; faucet=0x2F318989eB2ebd143aeb09f0B73E49726F2C63aC; rewards=0x9eEEfd308DA51944c1dc8A84E8750D7Aea823f1F
+network=testnet; onefi=0x39A239327aB82ED6A26C89F771B96882956570A0; onecrv=0x26E4a10625608928e16A59479C96b0Dcbdec3C95; faucet=0x5d171c65b6eb883F0D04d9f718A9E0908DEFF741; rewards=0x5c2BfcC1f7Cceb06aF497E101aF8f17011e8Ae0D; governance=0xD58b7A022b20EddB42Bb63f337CD59A871e86447
 ```
 
 Copy that line and paste it into your terminal and hit enter.
@@ -65,19 +65,19 @@ node tools/tokens/mint.js --network NETWORK --amount AMOUNT --token TOKEN --cont
 E.g. for 1FI & 1CRV:
 
 ```
-node tools/tokens/mint.js --network testnet --amount 1000 --token OneFI --contract $onefi
-node tools/tokens/mint.js --network testnet --amount 1000 --token OneCRV --contract $onecrv
+node tools/tokens/mint.js --network $network --amount 1000 --token OneFI --contract $onefi
+node tools/tokens/mint.js --network $network --amount 1000 --token OneCRV --contract $onecrv
 ```
 
 #### Faucet
 tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for 1CRV) for a given token with the specified amount of funds
 ```
-node tools/faucet/init.js --network testnet --token $onecrv --contract $faucet --amount 100000
+node tools/faucet/init.js --network $network --token $onecrv --contract $faucet --amount 100000
 ```
 
 tools/faucet/fund.js - fund an account using the HRC20 faucet (1CRV tokens):
 ```
-node tools/faucet/fund.js --network testnet --token $onecrv --contract $faucet
+node tools/faucet/fund.js --network $network --token $onecrv --contract $faucet
 ```
 
 ### Rewards
@@ -86,7 +86,7 @@ node tools/faucet/fund.js --network testnet --token $onecrv --contract $faucet
 To initialize the rewards system (so that people staking their 1CRV will start earning 1FI rewards) you need to run `tools/rewards/init.js`:
 
 ```
-node tools/rewards/init.js --network testnet --token $onefi --contract $rewards --amount 10000
+node tools/rewards/init.js --network $network --token $onefi --contract $rewards --amount 10000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn 1FI rewards for 1 week from the time of initialization.
@@ -97,21 +97,21 @@ This will initialize the rewards contract and make it possible for stakers to ea
 tools/staking/stake.js - will start staking 1CRV tokens with [the rewards contract](contracts/rewards/OneEarnRewards.sol).
 
 ```
-node tools/staking/stake.js --network testnet --lp $onecrv --rewards $rewards --amount 10000
+node tools/staking/stake.js --network $network --lp $onecrv --rewards $rewards --amount 10000
 ```
 
 ##### status.js
 tools/staking/status.js - will show status for the current staking to [the rewards contract](contracts/rewards/OneEarnRewards.sol).
 
 ```
-node tools/staking/status.js --network testnet --gov $onefi --lp $onecrv --rewards $rewards
+node tools/staking/status.js --network $network --gov $onefi --lp $onecrv --rewards $rewards
 ```
 
 ##### claim.js
 tools/staking/claim.js - claim staking rewards from [the rewards contract](contracts/rewards/OneEarnRewards.sol).
 
 ```
-node tools/staking/claim.js --network testnet --gov $onefi --lp $onecrv --rewards $rewards
+node tools/staking/claim.js --network $network --gov $onefi --lp $onecrv --rewards $rewards
 ```
 
 ### Governance
@@ -120,7 +120,7 @@ node tools/staking/claim.js --network testnet --gov $onefi --lp $onecrv --reward
 To initialize the governance system (so that people staking their 1FI will start earning 1CRV rewards) you need to run `tools/governance/init.js`:
 
 ```
-node tools/governance/init.js --network testnet --token $onecrv --contract $governance --amount 1000000
+node tools/governance/init.js --network $network --token $onecrv --contract $governance --amount 1000000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn 1FI rewards for 1 week from the time of initialization.
