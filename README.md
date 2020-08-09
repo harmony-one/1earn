@@ -113,3 +113,53 @@ tools/staking/claim.js - claim staking rewards from [the rewards contract](contr
 ```
 node tools/staking/claim.js --network testnet --gov $hfi --lp $hcrv --rewards $rewards
 ```
+
+### Governance
+
+#### Contract initialization
+To initialize the governance system (so that people staking their HFI will start earning hCRV rewards) you need to run `tools/governance/init.js`:
+
+```
+cd tools/governance
+./run.sh init.js --amount 10000
+```
+
+This will initialize the rewards contract and make it possible for stakers to earn HFI rewards for 1 week from the time of initialization.
+
+#### Staking
+tools/governance/stake.js - will start staking HFI tokens with [the governance contract](contracts/rewards/YearnGovernance.sol).
+
+```
+cd tools/governance
+./run.sh stake.js --amount 1
+```
+
+#### Propose
+tools/governance/propose.js - will start a proposing with [the governance contract](contracts/rewards/YearnGovernance.sol). Before do that, you need to stake HFI, if you haven't. 
+
+```
+cd tools/governance
+./run.sh propose.js
+```
+
+This will display the proposal ID in the end.
+
+
+##### status.js
+tools/governance/status.js - will show status of the current proposals with [the governance contract](contracts/rewards/YearnGovernance.sol).
+
+```
+cd tools/governance
+./run.sh status.js --start=0 --amount=5
+```
+
+#### Vote
+tools/governance/vote.js - VoteFor or VoteAgainst a proposal by Propose. You need to provide the proposal ID by `--id=ProposalID`.
+
+```shell
+cd tools/governance
+# vote for
+./run.sh vote.js --id=0
+# vote against
+./run.sh vote.js --id=0 --against
+```
