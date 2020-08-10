@@ -30,6 +30,14 @@ module.exports = {
         truffleProvider.setSigner(newAcc);
         return truffleProvider;
       },
+    },
+    develop: {
+      host:"127.0.0.1",
+      port: 8545,
+      network_id: 20,
+      accounts: 5,
+      defaultEtherBalance: 500,
+      blockTime: 0
     }
   },
 
