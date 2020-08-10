@@ -25,8 +25,8 @@ module.exports = function (deployer, network, accounts) {
               console.log(`   1CRV faucet address: ${HRC20Faucet.address} - ${getAddress(HRC20Faucet.address).bech32}`);
               console.log(`   1earn Rewards contract address: ${ONEearnRewards.address} - ${getAddress(ONEearnRewards.address).bech32}`);
               console.log(`   1earn Governance contract address: ${ONEearnGovernance.address} - ${getAddress(ONEearnGovernance.address).bech32}\n`);
-              console.log(`   network=${network}; onefi=${ONEFI.address}; onecrv=${ONECRV.address}; faucet=${HRC20Faucet.address}; rewards=${ONEearnRewards.address}; governance=${ONEearnGovernance.address}\n`);
-              console.log(`   addresses: {"onefi": "${ONEFI.address}", "onecrv": "${ONECRV.address}", "faucet": "${HRC20Faucet.address}", "rewards": "${ONEearnRewards.address}", "governance": "${ONEearnGovernance.address}"}`);
+              console.log(`   network=${network}; onefi=${ONEFI.address}; onecrv=${ONECRV.address}; wone=${WONE.address}; faucet=${HRC20Faucet.address}; rewards=${ONEearnRewards.address}; governance=${ONEearnGovernance.address}\n`);
+              console.log(`   addresses: {"onefi": "${ONEFI.address}", "onecrv": "${ONECRV.address}", "wone": "${WONE.address}", "faucet": "${HRC20Faucet.address}", "rewards": "${ONEearnRewards.address}", "governance": "${ONEearnGovernance.address}"}`);
             }); // End 1earn Governance deployment
           }); // End 1earn Rewards deployment
         }); // End HRC20Faucet deployment

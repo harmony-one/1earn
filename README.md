@@ -69,6 +69,12 @@ node tools/tokens/mint.js --network $network --amount 1000 --token OneFI --contr
 node tools/tokens/mint.js --network $network --amount 1000 --token OneCRV --contract $onecrv
 ```
 
+#### Swapping, ONE -> wONE
+tools/tokens/swap.js - swap ONE for WONE
+```
+node tools/tokens/swap.js --network $network --token $wone --amount 1
+```
+
 #### Faucet
 tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for 1CRV) for a given token with the specified amount of funds
 ```
