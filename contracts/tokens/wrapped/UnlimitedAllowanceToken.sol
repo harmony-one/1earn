@@ -3,14 +3,6 @@ pragma solidity >=0.4.21 <0.6.0;
 import { SafeMath } from "@openzeppelin/contracts/math/SafeMath.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-/**
- * @title UnlimitedAllowanceToken
- * @author Veil
- *
- * Standard UnlimitedAllowanceToken implementation: https://etherscan.io/address/0x2956356cd2a2bf3202f771f50d3d14a367b48070#code
- * The contract is adjusted to compile with solc 0.4.24
- * The transfer method is simplified by updating the allowance check in transferFrom
- */
 contract UnlimitedAllowanceToken is IERC20 {
   using SafeMath for uint256;
 

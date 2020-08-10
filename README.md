@@ -42,9 +42,9 @@ truffle migrate --reset --network mainnet
 
 To simplify testing of the contracts, it's advisable to set bash variables for the various tokens and contracts involved in the system.
 
-After you've deployed with e.g. `truffle migrate --reset --network testnet` the deploy script will output a line of bash variables containing all contract addresses, e.g:
+After you've deployed with e.g. `truffle migrate --reset --network testnet` the deploy script will output a line of bash env variables containing all contract addresses, e.g:
 ```
-network=testnet; onefi=0x39A239327aB82ED6A26C89F771B96882956570A0; onecrv=0x26E4a10625608928e16A59479C96b0Dcbdec3C95; faucet=0x5d171c65b6eb883F0D04d9f718A9E0908DEFF741; rewards=0x5c2BfcC1f7Cceb06aF497E101aF8f17011e8Ae0D; governance=0xD58b7A022b20EddB42Bb63f337CD59A871e86447
+export NETWORK=testnet; export ONEFI=0xFD9d389f7462348F09170a0a4739Caa699423565; export ONECRV=0x63c2b8a55e8b27C604bD19794bB76d68154afb32; export WONE=0xf21df8E1Fa50C46857C7680377423E79ab95F814; export FAUCET=0x0450E78b146fdbae04dc6CBd07eEC8Bf45f65F1F; export RESTRICTEDFAUCET=0xe6f4E5d9F9C8590442A57876D40D0677A75bBCA7; export REWARDS=0x6C97d6aF8813721FF22A7f62Ef2Cf9B864EAc988; export GOVERNANCE=0x8A13383BDdc46Fd46b6130f96956C8e06A8cb637
 ```
 
 Copy that line and paste it into your terminal and hit enter.
@@ -65,26 +65,26 @@ node tools/tokens/mint.js --network NETWORK --amount AMOUNT --token TOKEN --cont
 E.g. for 1FI & 1CRV:
 
 ```
-node tools/tokens/mint.js --network $network --amount 1000 --token OneFI --contract $onefi
-node tools/tokens/mint.js --network $network --amount 1000 --token OneCRV --contract $onecrv
+node tools/tokens/mint.js --network $NETWORK --token OneFI --contract $ONEFI --amount 10000
+node tools/tokens/mint.js --network $NETWORK --token OneCRV --contract $ONECRV --amount 1000000
 ```
 
 #### Swapping, ONE -> wONE
 tools/tokens/swap.js - swap ONE for WONE
 ```
-node tools/tokens/swap.js --network $network --token $wone --amount 1
+node tools/tokens/swap.js --network $NETWORK --token $WONE --amount 1
 ```
 
 #### Faucet
 ##### Normal faucet
 tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for 1CRV) for a given token with the specified amount of funds
 ```
-node tools/faucet/init.js --network $network --token $onecrv --contract $faucet --amount 100000
+node tools/faucet/init.js --network $NETWORK --token $ONECRV --contract $FAUCET --amount 100000
 ```
 
 tools/faucet/fund.js - fund an account using the HRC20 faucet (1CRV tokens):
 ```
-node tools/faucet/fund.js --network $network --token $onecrv --contract $faucet
+node tools/faucet/fund.js --network $NETWORK --token $ONECRV --contract $FAUCET
 ```
 
 ##### Restricted faucet
@@ -92,12 +92,12 @@ The restricted faucet will only allow one funding request - all subsequent fundi
 
 tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for 1CRV) for a given token with the specified amount of funds
 ```
-node tools/faucet/init.js --network $network --token $onecrv --contract $restrictedFaucet --amount 100000
+node tools/faucet/init.js --network $NETWORK --token $ONECRV --contract $RESTRICTEDFAUCET --amount 100000
 ```
 
 tools/faucet/fund.js - fund an account using the HRC20 faucet (1CRV tokens):
 ```
-node tools/faucet/fund.js --network $network --token $onecrv --contract $restrictedFaucet
+node tools/faucet/fund.js --network $NETWORK --token $ONECRV --contract $RESTRICTEDFAUCET
 ```
 
 ### Rewards
@@ -106,7 +106,7 @@ node tools/faucet/fund.js --network $network --token $onecrv --contract $restric
 To initialize the rewards system (so that people staking their 1CRV will start earning 1FI rewards) you need to run `tools/rewards/init.js`:
 
 ```
-node tools/rewards/init.js --network $network --token $onefi --contract $rewards --amount 10000
+node tools/rewards/init.js --network $NETWORK --token $ONEFI --contract $REWARDS --amount 10000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn 1FI rewards for 1 week from the time of initialization.
@@ -117,21 +117,21 @@ This will initialize the rewards contract and make it possible for stakers to ea
 tools/staking/stake.js - will start staking 1CRV tokens with [the rewards contract](contracts/rewards/OneEarnRewards.sol).
 
 ```
-node tools/staking/stake.js --network $network --lp $onecrv --rewards $rewards --amount 10000
+node tools/staking/stake.js --network $NETWORK --lp $ONECRV --rewards $REWARDS --amount 10000
 ```
 
 ##### status.js
 tools/staking/status.js - will show status for the current staking to [the rewards contract](contracts/rewards/OneEarnRewards.sol).
 
 ```
-node tools/staking/status.js --network $network --gov $onefi --lp $onecrv --rewards $rewards
+node tools/staking/status.js --network $NETWORK --gov $ONEFI --lp $ONECRV --rewards $REWARDS
 ```
 
 ##### claim.js
 tools/staking/claim.js - claim staking rewards from [the rewards contract](contracts/rewards/OneEarnRewards.sol).
 
 ```
-node tools/staking/claim.js --network $network --gov $onefi --lp $onecrv --rewards $rewards
+node tools/staking/claim.js --network $NETWORK --gov $ONEFI --lp $ONECRV --rewards $REWARDS
 ```
 
 ### Governance
@@ -140,7 +140,7 @@ node tools/staking/claim.js --network $network --gov $onefi --lp $onecrv --rewar
 To initialize the governance system (so that people staking their 1FI will start earning 1CRV rewards) you need to run `tools/governance/init.js`:
 
 ```
-node tools/governance/init.js --network $network --token $onecrv --contract $governance --amount 1000000
+node tools/governance/init.js --network $NETWORK --token $ONECRV --contract $GOVERNANCE --amount 1000000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn 1FI rewards for 1 week from the time of initialization.

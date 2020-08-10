@@ -62,12 +62,15 @@ const tokenInstance = tokenContract.methods;
 const ownerAddress = rewardsContract.wallet.signer.address;
 
 async function init() {
+  let balanceOf = await tokenInstance.balanceOf(ownerAddress).call(network.gasOptions());
+  console.log(`1CRV balance for wallet address ${ownerAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
+  
   console.log(`Attempting to transfer ${argv.amount} 1CRV tokens to governance/rewards contract address ${rewardsContractAddress} ...`);
   let transferResult = await tokenInstance.transfer(rewardsContractAddress, amount).send(network.gasOptions());
   let transferResultTxHash = transferResult.transaction.receipt.transactionHash;
   console.log(`Sent ${argv.amount} 1CRV tokens to rewards contract address ${rewardsContractAddress} - tx hash: ${transferResultTxHash}\n`);
 
-  let balanceOf = await tokenInstance.balanceOf(rewardsContractAddress).call(network.gasOptions());
+  balanceOf = await tokenInstance.balanceOf(rewardsContractAddress).call(network.gasOptions());
   console.log(`1CRV balance for contract address ${rewardsContractAddress} is: ${web3.utils.fromWei(balanceOf)}\n`);
 
   console.log(`Attempting to setRewardDistribution to address ${ownerAddress} ...`);
