@@ -38,6 +38,16 @@ Mainnet:
 truffle migrate --reset --network mainnet
 ```
 
+Truffle Develop:
+1. start Truffle Develop
+```
+truffle develop
+```
+2. deploy contract
+```
+truffle migrate --reset --network develop
+```
+
 ## Interaction/testing
 
 To simplify testing of the contracts, it's advisable to set bash variables for the various tokens and contracts involved in the system.
@@ -120,7 +130,8 @@ node tools/staking/claim.js --network $network --gov $onefi --lp $onecrv --rewar
 To initialize the governance system (so that people staking their 1FI will start earning 1CRV rewards) you need to run `tools/governance/init.js`:
 
 ```
-node tools/governance/init.js --network $network --token $onecrv --contract $governance --amount 1000000
+cd tools/governance
+network=testnet ./run.sh init.js --amount 1000000
 ```
 
 This will initialize the rewards contract and make it possible for stakers to earn 1FI rewards for 1 week from the time of initialization.
@@ -130,7 +141,7 @@ tools/governance/stake.js - will start staking 1FI tokens with [the governance c
 
 ```
 cd tools/governance
-./run.sh stake.js --amount 1
+network=testnet ./run.sh stake.js --amount 1
 ```
 
 #### Propose
@@ -138,18 +149,18 @@ tools/governance/propose.js - will start a proposing with [the governance contra
 
 ```
 cd tools/governance
-./run.sh propose.js
+network=testnet  ./run.sh propose.js
 ```
 
 This will display the proposal ID in the end.
 
 
-##### status.js
+#### Status
 tools/governance/status.js - will show status of the current proposals with [the governance contract](contracts/rewards/OneEarnGovernance.sol).
 
 ```
 cd tools/governance
-./run.sh status.js --start=0 --amount=5
+network=testnet ./run.sh status.js --start=0 --amount=5
 ```
 
 #### Vote
@@ -158,7 +169,7 @@ tools/governance/vote.js - VoteFor or VoteAgainst a proposal by Propose. You nee
 ```shell
 cd tools/governance
 # vote for
-./run.sh vote.js --id=0
+network=testnet ./run.sh vote.js --id=0
 # vote against
-./run.sh vote.js --id=0 --against
+network=testnet ./run.sh vote.js --id=0 --against
 ```

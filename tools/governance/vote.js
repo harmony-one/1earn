@@ -15,14 +15,21 @@ const argv = yargs
         description: 'voteAgainst or voteFor, default is voteFor',
         type: 'bool'
     })
+    .option('register', {
+        alias: 'r',
+        description: 'do register befor propose',
+        type: 'bool'
+    })
     .help()
     .alias('help', 'h')
     .argv;
 
 
-const 1earnGovernance = artifacts.require("1earnGovernance");
-const 1FI = artifacts.require("1FI");
-const 1CRV = artifacts.require("1CRV");
+const OneEarnGovernance = artifacts.require("OneEarnGovernance");
+const OneFI = artifacts.require("OneFI");
+const OneCRV = artifacts.require("OneCRV");
+
+const { fromBech32, toBech32 } = require("@harmony-js/crypto");
 
 const D = console.log;
 
@@ -31,28 +38,29 @@ let govAddress
 let tokenInstance
 let tokenAddress
 
-const walletAddress = 1earnGovernance.currentProvider.addresses[0];
+let walletAddress;// = OneEarnGovernance.currentProvider.addresses[0];
 
 
 function argvCheck() {
     if (argv.id == null || argv.id == '')
         throw 'You must supply the id of propose to vote, using --id ID or -i ID!';
-    govAddress = argv.contract ? argv.contract : 1earnGovernance.address;
+    govAddress = argv.contract ? argv.contract : OneEarnGovernance.address;
     if (!govAddress)
         throw 'You must supply a contract address using --contract CONTRACT_ADDRESS or -c CONTRACT_ADDRESS!';
 }
 
 async function init() {
     argvCheck();
-    govInstance = await 1earnGovernance.at(govAddress);
-    tokenAddress = await govInstance.1FI.call();
-    tokenInstance = await 1FI.at(tokenAddress);
+    walletAddress = (await web3.eth.getAccounts())[0];
+    govInstance = await OneEarnGovernance.at(govAddress);
+    tokenAddress = await govInstance.lpToken();
+    tokenInstance = await OneFI.at(tokenAddress);
 }
 
-const web3 = require('web3');
+//const web3 = require('web3');
 
 async function tokenStatus() {
-    console.log(`1FI token address: ${tokenAddress}`);
+    console.log(`OneFI token address: ${tokenAddress}`);
     let total = await tokenInstance.totalSupply();
     console.log(`Current total supply of the hfi token is: ${web3.utils.fromWei(total)}`);
 
@@ -61,6 +69,12 @@ async function tokenStatus() {
 }
 
 async function vote() {
+    if(argv.register){
+        console.log('registering...');
+        const registerResult = await govInstance.register();
+        console.log(`Register transaction hash: ${registerResult.tx}\n`);
+    }
+
     const voteAgainst = !!argv.against;
     const proposeID = argv.id;
 
@@ -74,6 +88,8 @@ async function vote() {
     console.table({
         id: proposal.id.toString(),
         proposer: proposal.proposer,
+        executor: toBech32(proposal.executor),
+        hash: proposal.hash,
         totalAgree: proposal.totalForVotes.toString(),
         totalAgainst: proposal.totalAgainstVotes.toString(),
         startBlockNo: proposal.start.toString(),

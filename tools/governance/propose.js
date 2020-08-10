@@ -5,19 +5,29 @@ const argv = yargs
         description: 'The contract address',
         type: 'string'
     })
-    .option('amount', {
-        alias: 'a',
-        description: 'The amount of tokens to stake',
+    .option('executor', {
+        alias: 'e',
+        description: 'The executor address of propose',
         type: 'string'
+    })
+    .option('hash', {
+        alias: 'H',
+        description: 'The hash field of propose',
+        type: 'string'
+    })
+    .option('register', {
+        alias: 'r',
+        description: 'do register befor propose',
+        type: 'bool'
     })
     .help()
     .alias('help', 'h')
     .argv;
 
 
-const 1earnGovernance = artifacts.require("1earnGovernance");
-const 1FI = artifacts.require("1FI");
-const 1CRV = artifacts.require("1CRV");
+const OneEarnGovernance = artifacts.require("OneEarnGovernance");
+const OneFI = artifacts.require("OneFI");
+const OneCRV = artifacts.require("OneCRV");
 
 const { fromBech32, toBech32 } = require("@harmony-js/crypto");
 
@@ -28,26 +38,31 @@ let govAddress
 let tokenInstance
 let tokenAddress
 
-const walletAddress = 1earnGovernance.currentProvider.addresses[0];
+let walletAddress// = OneEarnGovernance.currentProvider.addresses[0];
 
 function argvCheck() {
-    govAddress = argv.contract ? argv.contract : 1earnGovernance.address;
+    govAddress = argv.contract ? argv.contract : OneEarnGovernance.address;
     if (!govAddress)
         throw 'You must supply a contract address using --contract CONTRACT_ADDRESS or -c CONTRACT_ADDRESS!';
+    if (argv.executor == null)
+        throw 'You must supply a executor address, using --executor CONTRACT_EXECUTOR or -e CONTRACT_EXECUTOR'
+    if (argv.hash == null)
+        throw 'You must supply a hash, using --hash HASH or -H HASH'
 }
 
 
 async function init() {
     argvCheck();
-    govInstance = await 1earnGovernance.at(govAddress);
-    tokenAddress = await govInstance.1FI.call();
-    tokenInstance = await 1FI.at(tokenAddress);
+    walletAddress = (await web3.eth.getAccounts())[0];
+    govInstance = await OneEarnGovernance.at(govAddress);
+    //tokenAddress = await govInstance.lpToken();
+    //tokenInstance = await OneFI.at(tokenAddress);
 }
 
-const web3 = require('web3');
+//const web3 = require('web3');
 
 async function tokenStatus() {
-    console.log(`1FI token address: ${tokenAddress}`);
+    console.log(`OneFI token address: ${tokenAddress}`);
     let total = await tokenInstance.totalSupply();
     console.log(`Current total supply of the hfi token is: ${web3.utils.fromWei(total)}`);
 
@@ -63,7 +78,7 @@ async function propose() {
     console.log(`\t voteLock of ${walletAddress}: ${voteLock.toString()}`)
 
     console.log('doing a proposal...')
-    const proposeResult = await govInstance.propose();
+    const proposeResult = await govInstance.propose(argv.executor, argv.hash);
     console.log(`Propose transaction hash: ${proposeResult.tx}\n`);
 
     console.log('after a proposal:');
@@ -77,6 +92,8 @@ async function propose() {
     console.table({
         id: proposal.id.toString(),
         proposer: toBech32(proposal.proposer),
+        executor: toBech32(proposal.executor),
+        hash: proposal.hash,
         totalAgree: proposal.totalForVotes.toString(),
         totalAgainst: proposal.totalAgainstVotes.toString(),
         startBlockNo: proposal.start.toString(),
@@ -86,7 +103,7 @@ async function propose() {
 
 module.exports = function (result) {
     return init()
-        .then(tokenStatus)
+        //.then(tokenStatus)
         .then(propose)
         .then(result).catch(result);
 }

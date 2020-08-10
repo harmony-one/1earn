@@ -20,9 +20,9 @@ const argv = yargs
     .argv;
 
 
-const 1earnGovernance = artifacts.require("1earnGovernance");
-const 1FI = artifacts.require("1FI");
-const 1CRV = artifacts.require("1CRV");
+const OneEarnGovernance = artifacts.require("OneEarnGovernance");
+const OneFI = artifacts.require("OneFI");
+const OneCRV = artifacts.require("OneCRV");
 
 const { fromBech32, toBech32 } = require("@harmony-js/crypto");
 
@@ -33,10 +33,12 @@ let govAddress
 let tokenInstance
 let tokenAddress
 
-const walletAddress = 1earnGovernance.currentProvider.addresses[0];
+//const Web3 = require("web3");
+let walletAddress;
+//OneEarnGovernance.currentProvider.addresses[0];
 
 function argvCheck() {
-    govAddress = argv.contract ? argv.contract : 1earnGovernance.address;
+    govAddress = argv.contract ? argv.contract : OneEarnGovernance.address;
     if (!govAddress)
         throw 'You must supply a contract address using --contract CONTRACT_ADDRESS or -c CONTRACT_ADDRESS!';
 }
@@ -44,14 +46,19 @@ function argvCheck() {
 
 async function init() {
     argvCheck();
-    govInstance = await 1earnGovernance.at(govAddress);
-    tokenAddress = await govInstance.1FI.call();
-    tokenInstance = await 1FI.at(tokenAddress);
+    walletAddress = (await web3.eth.getAccounts())[0];
+    govInstance = await OneEarnGovernance.at(govAddress);
+    //tokenAddress = await govInstance.lpToken();
+    //tokenInstance = await OneFI.at(tokenAddress);
 }
 
-const web3 = require('web3');
-
 async function tokenStatus() {
+}
+
+function short(msg){
+    if(msg.length > 10)
+        return `${msg.slice(0,4)}..${msg.slice(-4)}`;
+    return msg;
 }
 
 async function propose() {
@@ -71,7 +78,9 @@ async function propose() {
         const proposal = await govInstance.proposals(proposalID);
         proposals.push({
             id: proposal.id.toString(),
-            proposer: toBech32(proposal.proposer),
+            proposer: short(toBech32(proposal.proposer)),
+            executor: short(toBech32(proposal.executor)),
+            hash: short(proposal.hash),
             totalAgree: proposal.totalForVotes.toString(),
             totalAgainst: proposal.totalAgainstVotes.toString(),
             startBlockNo: proposal.start.toString(),
