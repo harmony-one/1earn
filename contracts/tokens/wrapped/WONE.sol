@@ -33,7 +33,7 @@ contract WONE is UnlimitedAllowanceToken {
   /* ============ New functionality ============ */
 
   /**
-   * Buys tokens with Ether, exchanging them 1:1 and sets the spender allowance
+   * Buys tokens with ONE, exchanging them 1:1 and sets the spender allowance
    *
    * @param _spender          Spender address for the allowance
    * @param _allowance        Allowance amount
