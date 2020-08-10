@@ -76,6 +76,7 @@ node tools/tokens/swap.js --network $network --token $wone --amount 1
 ```
 
 #### Faucet
+##### Normal faucet
 tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for 1CRV) for a given token with the specified amount of funds
 ```
 node tools/faucet/init.js --network $network --token $onecrv --contract $faucet --amount 100000
@@ -84,6 +85,19 @@ node tools/faucet/init.js --network $network --token $onecrv --contract $faucet 
 tools/faucet/fund.js - fund an account using the HRC20 faucet (1CRV tokens):
 ```
 node tools/faucet/fund.js --network $network --token $onecrv --contract $faucet
+```
+
+##### Restricted faucet
+The restricted faucet will only allow one funding request - all subsequent funding requests will be denied.
+
+tools/faucet/init.js - initialize a HRC20 token faucet (in our case - a faucet for 1CRV) for a given token with the specified amount of funds
+```
+node tools/faucet/init.js --network $network --token $onecrv --contract $restrictedFaucet --amount 100000
+```
+
+tools/faucet/fund.js - fund an account using the HRC20 faucet (1CRV tokens):
+```
+node tools/faucet/fund.js --network $network --token $onecrv --contract $restrictedFaucet
 ```
 
 ### Rewards

@@ -5,6 +5,7 @@ mkdir -p build/abi
 contracts=(
 ERC20
 HRC20Faucet
+HRC20RestrictedFaucet
 OneCRV
 OneEarnGovernance
 OneEarnRewards
@@ -19,4 +20,3 @@ done
 cd build/abi
 
 tar -czvf abi.tar.gz *.json
-
